@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace OnlineShop.Entities
 {
     public class Product
@@ -8,5 +10,11 @@ namespace OnlineShop.Entities
         public int MinimumStock { get; set; }
         public int ProductCategoryId { get; set; }
         public ProductCategory ProductCategory { get; set; }
+        public HashSet<WarehouseItem> WarehouseItems { get; set; }
+
+        public Product()
+        {
+            WarehouseItems = new HashSet<WarehouseItem>();
+        }
     } 
 }
