@@ -1,6 +1,6 @@
 namespace OnlineShop.Entities
 {
-    public class Warehouse
+    public class WarehouseItem
     {
         public int Id { get; set; }
         public int Stock { get; set; }
