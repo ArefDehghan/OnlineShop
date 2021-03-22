@@ -7,11 +7,14 @@ using OnlineShop.Infrastructure.Application;
 using OnlineShop.Persistence.EF;
 using OnlineShop.Persistence.EF.ProductCategories;
 using OnlineShop.Persistence.EF.Products;
+using OnlineShop.Persistence.EF.Purchases;
 using OnlineShop.Persistence.EF.WarehouseItems;
 using OnlineShop.Services.ProductCategories;
 using OnlineShop.Services.ProductCategories.Contracts;
 using OnlineShop.Services.Products;
 using OnlineShop.Services.Products.Contracts;
+using OnlineShop.Services.Purchases;
+using OnlineShop.Services.Purchases.Contracts;
 using OnlineShop.Services.WarehouseItems;
 using OnlineShop.Services.WarehouseItems.Contracts;
 
@@ -38,6 +41,9 @@ namespace OnlineShop.RestApi
 
             services.AddScoped<ProductRepository, EFProductRepository>();
             services.AddScoped<ProductService, ProductAppService>();
+
+            services.AddScoped<PurchaseRepository, EFPurchaseRepository>();
+            services.AddScoped<PurchaseService, PurchaseAppService>();
 
             services.AddScoped<WarehouseItemRepository, EFWarehouseItemRepository>();
 
