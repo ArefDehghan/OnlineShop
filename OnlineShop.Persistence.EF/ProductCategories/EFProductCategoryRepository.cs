@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Entities;
 using OnlineShop.Services.ProductCategories.Contracts;
 
@@ -17,17 +20,18 @@ namespace OnlineShop.Persistence.EF.ProductCategories
             _context.ProductCategories.Add(productCategory);
         }
 
-        public async Task<GetProductCategoryDto> GetById(int id)
+        public async Task<IList<GetProductCategoryDto>> GetProductCategories()
         {
-            var productCategory = await _context.ProductCategories.FindAsync(id);
-
-            var getProductCategoryDto = new GetProductCategoryDto
+            return await _context.ProductCategories.Select(_ => new GetProductCategoryDto
             {
-                Id = productCategory.Id,
-                Title = productCategory.Title
-            };
+                Id = _.Id,
+                Title = _.Title
+            }).ToListAsync();
+        }
 
-            return getProductCategoryDto;
+        public async Task<bool> IsTitleDuplicate(string title)
+        {
+            return await _context.ProductCategories.AnyAsync(_ => _.Title == title);
         }
     }
 }

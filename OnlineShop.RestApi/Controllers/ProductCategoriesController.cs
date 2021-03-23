@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Services.ProductCategories.Contracts;
@@ -15,15 +16,15 @@ namespace OnlineShop.RestApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public Task<GetProductCategoryDto> GetById(int id)
+        public async Task<IList<GetProductCategoryDto>> GetProductCategories(int id)
         {
-            return _service.GetById(id);
+            return await _service.GetProductCategories();
         }
 
         [HttpPost]
-        public Task<int> Add(AddProductCategoryDto addProductCategoryDto)
+        public async Task<int> Add([FromBody] string title)
         {
-            return _service.Add(addProductCategoryDto);
+            return await _service.Add(title);
         }
     }
 }

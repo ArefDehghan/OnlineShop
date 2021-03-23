@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using OnlineShop.Entities;
 using OnlineShop.Infrastructure.Application;
 using OnlineShop.Services.ProductCategories.Contracts;
+using OnlineShop.Services.ProductCategories.Exceptions;
 
 namespace OnlineShop.Services.ProductCategories
 {
@@ -15,11 +17,13 @@ namespace OnlineShop.Services.ProductCategories
             _repository = repository;
         }
 
-        public async Task<int> Add(AddProductCategoryDto addProductCategoryDto)
+        public async Task<int> Add(string productCategoryTitle)
         {
+            ThrowExceptionIfTitleIsDuplicate(productCategoryTitle);
+
             var productCategory = new ProductCategory
             {
-                Title = addProductCategoryDto.Title
+                Title = productCategoryTitle
             };
 
             _repository.Add(productCategory);
@@ -28,11 +32,20 @@ namespace OnlineShop.Services.ProductCategories
             return productCategory.Id;
         }
 
-        public async Task<GetProductCategoryDto> GetById(int id)
+        private async void ThrowExceptionIfTitleIsDuplicate(string title)
         {
-            var productCategory = await _repository.GetById(id);
+            if (await _repository.IsTitleDuplicate(title))
+            {
+                throw new ProductCategoryTitleIsDuplicateException
+                {
+                    ProductCategoryTitle = title
+                };
+            }
+        }
 
-            return productCategory;
+        public async Task<IList<GetProductCategoryDto>> GetProductCategories()
+        {
+            return await _repository.GetProductCategories();
         }
     }
 }
