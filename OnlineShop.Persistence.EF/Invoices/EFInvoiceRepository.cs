@@ -18,6 +18,11 @@ namespace OnlineShop.Persistence.EF.Invoices
             _context.Invoices.Add(invoice);
         }
 
+        public async Task<bool> IsInvoiceExists(int id)
+        {
+            return await _context.Invoices.AnyAsync(_ => _.Id == id);
+        }
+
         public async Task<bool> IsInvoiceNumberExists(string invoiceNumber)
         {
             return await _context.Invoices.AnyAsync(_ => _.InvoiceNumber == invoiceNumber);

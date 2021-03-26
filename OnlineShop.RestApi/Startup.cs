@@ -5,11 +5,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OnlineShop.Infrastructure.Application;
 using OnlineShop.Persistence.EF;
+using OnlineShop.Persistence.EF.InvoiceItems;
 using OnlineShop.Persistence.EF.Invoices;
 using OnlineShop.Persistence.EF.ProductCategories;
 using OnlineShop.Persistence.EF.Products;
 using OnlineShop.Persistence.EF.Purchases;
 using OnlineShop.Persistence.EF.WarehouseItems;
+using OnlineShop.Services.InvoiceItems;
+using OnlineShop.Services.InvoiceItems.Contracts;
 using OnlineShop.Services.Invoices;
 using OnlineShop.Services.Invoices.Contracts;
 using OnlineShop.Services.ProductCategories;
@@ -50,6 +53,9 @@ namespace OnlineShop.RestApi
 
             services.AddScoped<InvoiceRepository, EFInvoiceRepository>();
             services.AddScoped<InvoiceService, InvoiceAppService>();
+
+            services.AddScoped<InvoiceItemRepository, EFInvoiceItemRepository>();
+            services.AddScoped<InvoiceItemService, InvoiceItemAppService>();
 
             services.AddScoped<WarehouseItemRepository, EFWarehouseItemRepository>();
 

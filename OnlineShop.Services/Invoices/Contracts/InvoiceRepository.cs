@@ -7,5 +7,6 @@ namespace OnlineShop.Services.Invoices.Contracts
     {
         void Add(Invoice invoice);    
         Task<bool> IsInvoiceNumberExists(string invoiceNumber);
+        Task<bool> IsInvoiceExists(int id);
     }
 }

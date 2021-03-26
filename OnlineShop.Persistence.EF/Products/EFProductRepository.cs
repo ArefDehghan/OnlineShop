@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Entities;
 using OnlineShop.Services.Products.Contracts;
 
@@ -26,6 +27,11 @@ namespace OnlineShop.Persistence.EF.Products
         public bool IsProductCodeExists(string productCode)
         {
             return _context.Products.Any(_ => _.ProductCode == productCode);
+        }
+
+        public async Task<bool> IsProductExists(int id)
+        {
+            return await _context.Products.AnyAsync(_ => _.Id == id);
         }
 
         public bool IsProductTitleExistsInProductCategory(string productTitle)
