@@ -22,7 +22,7 @@ namespace OnlineShop.Persistence.EF.Invoices
                 .HasMaxLength(20);
 
             builder.Property(_ => _.CheckoutDate)
-                .IsRequired(true);
+                .IsRequired(false);
 
             builder.HasMany(_ => _.InvoiceItems)
                 .WithOne(_ => _.Invoice)
