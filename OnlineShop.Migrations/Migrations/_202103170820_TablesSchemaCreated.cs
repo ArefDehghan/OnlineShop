@@ -2,8 +2,8 @@ using FluentMigrator;
 
 namespace OnlineShop.Migrations
 {
-    [Migration(202003170820)]
-    public class _202003170820_TablesSchemaCreated : Migration
+    [Migration(202103170820)]
+    public class _202103170820_TablesSchemaCreated : Migration
     {
         public override void Up()
         {
