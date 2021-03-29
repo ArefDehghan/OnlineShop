@@ -10,11 +10,12 @@ namespace OnlineShop.Entities
         public string InvoiceNumber { get; set; }
         public HashSet<InvoiceItem> InvoiceItems { get; set; }
         public HashSet<AccountingDocument> AccountingDocuments { get; set; }
-        public DateTime CheckoutDate { get; set; }
+        public DateTime? CheckoutDate { get; set; }
 
         public Invoice()
         {
             InvoiceItems = new HashSet<InvoiceItem>();
+            AccountingDocuments = new HashSet<AccountingDocument>();
         }
     }
 }
