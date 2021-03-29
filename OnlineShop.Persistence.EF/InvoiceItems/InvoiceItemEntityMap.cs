@@ -19,9 +19,9 @@ namespace OnlineShop.Persistence.EF.InvoiceItems
             builder.Property(_ => _.Count)
                 .IsRequired(true);
 
-            builder.HasOne(_ => _.Product)
+            builder.HasOne(_ => _.WarehouseItem)
                 .WithMany()
-                .HasForeignKey(_ => _.ProductId);
+                .HasForeignKey(_ => _.WarehouseItemId);
         }
     }
 }

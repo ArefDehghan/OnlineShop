@@ -21,7 +21,7 @@ namespace OnlineShop.Persistence.EF.Products
 
         public async Task<Product> FindById(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products.Include(_ => _.WarehouseItems).SingleOrDefaultAsync(_ => _.Id == id);
         }
 
         public bool IsProductCodeExists(string productCode)
