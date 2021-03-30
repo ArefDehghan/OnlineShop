@@ -29,6 +29,11 @@ namespace OnlineShop.Persistence.EF.ProductCategories
             }).ToListAsync();
         }
 
+        public async Task<bool> IsProductCategoryExists(int id)
+        {
+            return await _context.ProductCategories.AnyAsync(_ => _.Id == id);
+        }
+
         public async Task<bool> IsTitleDuplicate(string title)
         {
             return await _context.ProductCategories.AnyAsync(_ => _.Title == title);

@@ -1,9 +1,10 @@
 using System.Threading.Tasks;
 using OnlineShop.Entities;
 using OnlineShop.Infrastructure.Application;
-using OnlineShop.Services.Products.Exceptions;
 using OnlineShop.Services.Purchases.Contracts;
+using OnlineShop.Services.Purchases.Exceptions;
 using OnlineShop.Services.WarehouseItems.Contracts;
+using OnlineShop.Services.WarehouseItems.Exceptions;
 
 namespace OnlineShop.Services.Purchases
 {
@@ -29,7 +30,11 @@ namespace OnlineShop.Services.Purchases
                 ProductId = addPurchaseDto.ProductId
             };
 
-            var warehouseItem = await GetWarehouseItemByProductId(purchase.ProductId);
+            var warehouseItem = await _warehouseItemRepository.FindByProductId(addPurchaseDto.ProductId);
+            ThrowExceptionIfWarehouseItemNotExists(addPurchaseDto.ProductId, warehouseItem);
+
+            await ThrowExceptionIfInvoiceNumberAlreadyExists(addPurchaseDto.InvoiceNumber);
+
             warehouseItem.Stock += purchase.Count;
 
             _repository.Add(purchase);
@@ -38,19 +43,26 @@ namespace OnlineShop.Services.Purchases
             return purchase.Id;
         }
 
-        private async Task<WarehouseItem> GetWarehouseItemByProductId(int productId)
+        private async Task ThrowExceptionIfInvoiceNumberAlreadyExists(string invoiceNumber)
         {
-            var warehouseItem = await _warehouseItemRepository.FindByProductId(productId); 
-
-            if (warehouseItem == null)
+            if (await _repository.IsInvoiceNumberExists(invoiceNumber))
             {
-                throw new ProductNotExistsException
+                throw new PurchaseInvoiceNumberAlreadyExistsException
                 {
-                    Id = productId
+                    InvoiceNumber = invoiceNumber
                 };
             }
+        }
 
-            return warehouseItem;
+        private void ThrowExceptionIfWarehouseItemNotExists(int productId, WarehouseItem warehouseItem)
+        {
+            if (warehouseItem == null)
+            {
+                throw new WarehouseItemNotExistsException
+                {
+                    ProductId = productId
+                };
+            }
         }
     }
 }

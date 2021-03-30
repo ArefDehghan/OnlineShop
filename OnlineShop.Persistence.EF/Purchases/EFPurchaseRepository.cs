@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Entities;
 using OnlineShop.Services.Purchases.Contracts;
 
@@ -20,6 +21,11 @@ namespace OnlineShop.Persistence.EF.Purchases
         public async Task<Purchase> FindById(int id)
         {
             return await _context.Purchases.FindAsync(id);
+        }
+
+        public async Task<bool> IsInvoiceNumberExists(string InvoiceNumber)
+        {
+            return await _context.Purchases.AnyAsync(_ => _.InvoiceNumber == InvoiceNumber);
         }
     }
 }

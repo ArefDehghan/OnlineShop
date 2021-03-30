@@ -13,9 +13,21 @@ namespace OnlineShop.Persistence.EF.WarehouseItems
             _context = context;
         }
 
-        public async Task<WarehouseItem> FindByProductId(int id)
+        public async Task<WarehouseItem> FindById(int id)
         {
-            return await _context.WarehouseItems.SingleOrDefaultAsync(_ => _.ProductId == id);
+            return await _context.WarehouseItems.Include(_ => _.Product)
+                .SingleOrDefaultAsync(_ => _.Id == id);
+        }
+
+        public async Task<WarehouseItem> FindByProductId(int productId)
+        {
+            return await _context.WarehouseItems.Include(_ => _.Product)
+                .SingleOrDefaultAsync(_ => _.ProductId == productId);
+        }
+
+        public async Task<bool> IsWarehouseItemExistsById(int id)
+        {
+            return await _context.WarehouseItems.AnyAsync(_ => _.Id == id);
         }
     }
 }

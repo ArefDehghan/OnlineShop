@@ -4,6 +4,6 @@ namespace OnlineShop.Services.Products.Exceptions
 {
     public class ProductNotExistsException : BusinessException
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
     }
 }

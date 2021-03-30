@@ -2,8 +2,8 @@ using OnlineShop.Infrastructure.Domain;
 
 namespace OnlineShop.Services.WarehouseItems.Exceptions
 {
-    public class WarehouseItemIsOutOfStockException : BusinessException
+    public class ProductIsUnavailableException : BusinessException
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
     }
 }

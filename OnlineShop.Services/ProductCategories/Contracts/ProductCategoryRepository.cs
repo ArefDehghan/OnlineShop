@@ -9,5 +9,6 @@ namespace OnlineShop.Services.ProductCategories.Contracts
         Task<IList<GetProductCategoryDto>> GetProductCategories();
         void Add(ProductCategory productCategory);
         Task<bool> IsTitleDuplicate(string title);
+        Task<bool> IsProductCategoryExists(int id);
     }
 }

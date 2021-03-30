@@ -7,7 +7,6 @@ using OnlineShop.Services.InvoiceItems.Exceptions;
 using OnlineShop.Services.Invoices.Contracts;
 using OnlineShop.Services.Invoices.Exceptions;
 using OnlineShop.Services.Products.Contracts;
-using OnlineShop.Services.Products.Exceptions;
 using OnlineShop.Services.WarehouseItems.Contracts;
 using OnlineShop.Services.WarehouseItems.Exceptions;
 
@@ -35,17 +34,21 @@ namespace OnlineShop.Services.InvoiceItems
 
         public async Task<int> Add(AddInvoiceItemDto addInvoiceItemDto)
         {
+            await ThrowExceptionIfProductNotExists(addInvoiceItemDto.WarehouseItemId);
+            await ThrowExceptionIfInvoiceNotExists(addInvoiceItemDto.InvoiceId);
+            await ThrowExceptionIfInvoiceItemIsAlreadyInInvoice(addInvoiceItemDto.WarehouseItemId, addInvoiceItemDto.InvoiceId);
+
+            var warehouseItem = await _warehouseItemRepository.FindById(addInvoiceItemDto.WarehouseItemId);
+
             var invoiceItem = new InvoiceItem
             {
                 Price = addInvoiceItemDto.Price,
                 Count = addInvoiceItemDto.Count,
                 InvoiceId = addInvoiceItemDto.InvoiceId,
-                ProductId = addInvoiceItemDto.ProductId
+                WarehouseItemId = addInvoiceItemDto.WarehouseItemId,
+                WarehouseItem = warehouseItem
             };
-
-            ThrowExceptionIfProductNotExists(addInvoiceItemDto.ProductId);
-            ThrowExceptionIfInvoiceNotExists(addInvoiceItemDto.InvoiceId);
-            ThrowExceptionIfProductIsNotUpForSale(addInvoiceItemDto.ProductId);
+            await ThrowExceptionIfProductIsNotUpForSale(invoiceItem);
 
             _repository.Add(invoiceItem);
             await _unitOfWork.CompleteAsync();
@@ -53,87 +56,69 @@ namespace OnlineShop.Services.InvoiceItems
             return invoiceItem.Id;
         }
 
-        private async void ThrowExceptionIfInvoiceNotExists(int invoiceId)
+        private async Task ThrowExceptionIfInvoiceItemIsAlreadyInInvoice(int warehouseItemId, int invoiceId)
         {
-            if (await _invoiceRepository.IsInvoiceExists(invoiceId))
+            if (await _repository.IsInvoiceItemExistsInInvoice(warehouseItemId, invoiceId))
+            {
+                throw new InvoiceItemIsAlreadyInInvoiceException
+                {
+                    WarehouseId = warehouseItemId,
+                    InvoiceId = invoiceId
+                };
+            }
+        }
+
+        private async Task ThrowExceptionIfProductIsNotUpForSale(InvoiceItem invoiceItem)
+        {
+            if (!await _repository.IsInvoiceItemUpForSale(invoiceItem))
+            {
+                throw new ProductIsUnavailableException
+                {
+                    ProductId = invoiceItem.WarehouseItem.ProductId
+                };
+            }
+        }
+
+        private async Task ThrowExceptionIfInvoiceNotExists(int invoiceId)
+        {
+            if (!await _invoiceRepository.IsInvoiceExists(invoiceId))
             {
                 throw new InvoiceNotExistsException
                 {
-                    Id = invoiceId
+                    InvoiceId = invoiceId
                 };
             }
         }
 
-        private async void ThrowExceptionIfProductNotExists(int productId)
+        private async Task ThrowExceptionIfProductNotExists(int productId)
         {
-            if (await _productRepository.IsProductExists(productId))
+            if (!await _warehouseItemRepository.IsWarehouseItemExistsById(productId))
             {
-                throw new ProductNotExistsException
+                throw new WarehouseItemNotExistsException
                 {
-                    Id = productId
+                    ProductId = productId
                 };
             }
-        }
-
-        private async void ThrowExceptionIfProductIsNotUpForSale(int productId)
-        {
-            var getWarehouseItemDto = await GetWarehouseItem(productId);
-
-            if (getWarehouseItemDto.WarehouseItemStatus == WarehouseItemStatus.OutOfStock)
-            {
-                throw new WarehouseItemIsOutOfStockException
-                {
-                    Id = getWarehouseItemDto.Id
-                };
-            }
-
-            if (getWarehouseItemDto.WarehouseItemStatus == WarehouseItemStatus.ReadyToPurchase)
-            {
-                throw new WarehouseItemIsReadyToPurchaseException
-                {
-                    Id = getWarehouseItemDto.Id
-                };
-            }
-        }
-
-        private async Task<GetWarehouseItemDto> GetWarehouseItem(int productId)
-        {
-            var warehouseItem = await _warehouseItemRepository.FindByProductId(productId);
-            var getWarehouseItemDto = new GetWarehouseItemDto
-            {
-                Id = warehouseItem.Id,
-                Stock = warehouseItem.Stock,
-                MinimumStock = warehouseItem.Product.MinimumStock,
-                ProductTitle = warehouseItem.Product.Title,
-                ProductCode = warehouseItem.Product.ProductCode,
-                ProductCategoryId = warehouseItem.Product.ProductCategoryId,
-                ProductId = warehouseItem.ProductId
-            };
-
-            return getWarehouseItemDto;
         }
 
         public async Task Delete(int id)
         {
-            var invoiceItem = await GetInvoiceItemById(id);
+            var invoiceItem = await _repository.FindById(id);
+            ThrowExceptionIfInvoiceItemNotExists(id, invoiceItem);
 
             _repository.Delete(invoiceItem);
             await _unitOfWork.CompleteAsync();
         }
 
-        private async Task<InvoiceItem> GetInvoiceItemById(int id)
+        private void ThrowExceptionIfInvoiceItemNotExists(int invoiceItemId, InvoiceItem invoiceItem)
         {
-            var invoiceItem = await _repository.FindById(id);
-
             if (invoiceItem == null)
             {
                 throw new InvoiceItemNotExistsException
                 {
-                    Id = id
+                    InvoiceItemId = invoiceItemId
                 };
             }
-
-            return invoiceItem;
         }
     }
 }

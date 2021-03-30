@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Services.Invoices.Contracts;
@@ -18,6 +19,12 @@ namespace OnlineShop.RestApi.Controllers
         public async Task<int> Add(AddInvoiceDto addInvoiceDto)
         {
             return await _service.Add(addInvoiceDto);
+        }
+
+        [HttpPut("{id}")]
+        public async Task Checkout(int id, [FromBody] DateTime checkoutDate)
+        {
+            await _service.Checkout(id, checkoutDate);
         }
     }
 }

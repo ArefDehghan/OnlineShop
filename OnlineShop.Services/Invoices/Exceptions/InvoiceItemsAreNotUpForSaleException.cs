@@ -2,7 +2,7 @@ using OnlineShop.Infrastructure.Domain;
 
 namespace OnlineShop.Services.Invoices.Exceptions
 {
-    public class InvoiceNotExistsException : BusinessException
+    public class InvoiceItemsAreNotUpForSaleException : BusinessException
     {
         public int InvoiceId { get; set; }
     }

@@ -11,17 +11,5 @@ namespace OnlineShop.Services.WarehouseItems.Contracts
         public int MinimumStock { get; set; }
         public int ProductId { get; set; }
         public int ProductCategoryId { get; set; }
-        public WarehouseItemStatus WarehouseItemStatus 
-        {
-            get
-            {
-                if (Stock == 0)
-                    return WarehouseItemStatus.OutOfStock;
-                if (Stock == MinimumStock)
-                    return WarehouseItemStatus.ReadyToPurchase;
-                else
-                    return WarehouseItemStatus.UpForSale;
-            }
-        }
     }
 }

@@ -4,6 +4,6 @@ namespace OnlineShop.Services.InvoiceItems.Exceptions
 {
     public class InvoiceItemNotExistsException : BusinessException
     {
-        public int Id { get; set; }
+        public int InvoiceItemId { get; set; }
     }
 }

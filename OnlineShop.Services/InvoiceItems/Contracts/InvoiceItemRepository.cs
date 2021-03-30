@@ -8,5 +8,7 @@ namespace OnlineShop.Services.InvoiceItems.Contracts
         void Add(InvoiceItem invoiceItem);
         void Delete(InvoiceItem invoiceItem);
         Task<InvoiceItem> FindById(int id);
+        Task<bool> IsInvoiceItemUpForSale(InvoiceItem invoiceItem);
+        Task<bool> IsInvoiceItemExistsInInvoice(int warehouseItemId, int invoiceId);
     }
 }
