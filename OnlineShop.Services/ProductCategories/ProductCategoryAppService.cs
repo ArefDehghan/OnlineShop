@@ -19,7 +19,7 @@ namespace OnlineShop.Services.ProductCategories
 
         public async Task<int> Add(string productCategoryTitle)
         {
-            ThrowExceptionIfTitleIsDuplicate(productCategoryTitle);
+            await ThrowExceptionIfTitleIsDuplicate(productCategoryTitle);
 
             var productCategory = new ProductCategory
             {
@@ -32,7 +32,7 @@ namespace OnlineShop.Services.ProductCategories
             return productCategory.Id;
         }
 
-        private async void ThrowExceptionIfTitleIsDuplicate(string title)
+        private async Task ThrowExceptionIfTitleIsDuplicate(string title)
         {
             if (await _repository.IsTitleDuplicate(title))
             {
