@@ -4,7 +4,7 @@ using OnlineShop.Entities;
 
 namespace OnlineShop.Persistence.EF.Purchases
 {
-    public class PurchaseEntityMap : IEntityTypeConfiguration<Purchase>
+    class PurchaseEntityMap : IEntityTypeConfiguration<Purchase>
     {
         public void Configure(EntityTypeBuilder<Purchase> builder)
         {

@@ -4,7 +4,7 @@ using OnlineShop.Entities;
 
 namespace OnlineShop.Persistence.EF.InvoiceItems
 {
-    public class InvoiceItemEntityMap : IEntityTypeConfiguration<InvoiceItem>
+    class InvoiceItemEntityMap : IEntityTypeConfiguration<InvoiceItem>
     {
         public void Configure(EntityTypeBuilder<InvoiceItem> builder)
         {

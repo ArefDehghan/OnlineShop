@@ -4,7 +4,7 @@ using OnlineShop.Entities;
 
 namespace OnlineShop.Persistence.EF.ProductCategories
 {
-    public class ProductCategoryEntityMap : IEntityTypeConfiguration<ProductCategory>
+    class ProductCategoryEntityMap : IEntityTypeConfiguration<ProductCategory>
     {
         public void Configure(EntityTypeBuilder<ProductCategory> builder)
         {
