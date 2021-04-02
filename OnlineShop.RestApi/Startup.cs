@@ -59,9 +59,10 @@ namespace OnlineShop.RestApi
             services.AddScoped<InvoiceItemRepository, EFInvoiceItemRepository>();
             services.AddScoped<InvoiceItemService, InvoiceItemAppService>();
 
-            services.AddScoped<AccountingDocumentRepository, EFAccountingDocumentRepository>();
-
             services.AddScoped<WarehouseItemRepository, EFWarehouseItemRepository>();
+            services.AddScoped<WarehouseItemService, WarehouseItemAppService>();
+            
+            services.AddScoped<AccountingDocumentRepository, EFAccountingDocumentRepository>();
 
             services.AddControllers();
         }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using OnlineShop.Entities;
 
@@ -8,5 +9,6 @@ namespace OnlineShop.Services.WarehouseItems.Contracts
         Task<WarehouseItem> FindByProductId(int ProductId);
         Task<WarehouseItem> FindById(int id);
         Task<bool> IsWarehouseItemExistsById(int id);
+        Task<IList<GetWarehouseItemDto>> GetWarehouseItems(FilterModelDto filterModel);
     }
 }
