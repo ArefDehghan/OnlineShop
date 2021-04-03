@@ -35,11 +35,9 @@ namespace OnlineShop.Persistence.EF.Invoices
 
         public Task<bool> AreInvoiceItemsUpForSale(Invoice invoice)
         {
-            return new TaskFactory().StartNew(() => 
-                (!invoice.InvoiceItems.Any(invoiceItem =>
-                    (invoiceItem.WarehouseItem.Stock - 
-                     invoiceItem.WarehouseItem.Product.MinimumStock)
-                     < invoiceItem.Count)));
+            return new TaskFactory().StartNew(() =>
+                (invoice.InvoiceItems.All(_ => 
+                    (_.WarehouseItem.Stock - _.WarehouseItem.Product.MinimumStock) >= _.Count)));
         }
 
         public async Task<bool> IsInvoiceExists(int id)
