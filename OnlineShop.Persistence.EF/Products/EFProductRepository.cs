@@ -24,9 +24,9 @@ namespace OnlineShop.Persistence.EF.Products
             return await _context.Products.Include(_ => _.WarehouseItems).SingleOrDefaultAsync(_ => _.Id == id);
         }
 
-        public bool IsProductCodeExists(string productCode)
+        public async Task<bool> IsProductCodeExists(string productCode)
         {
-            return _context.Products.Any(_ => _.ProductCode == productCode);
+            return await _context.Products.AnyAsync(_ => _.ProductCode == productCode);
         }
 
         public async Task<bool> IsProductExists(int id)
@@ -34,9 +34,9 @@ namespace OnlineShop.Persistence.EF.Products
             return await _context.Products.AnyAsync(_ => _.Id == id);
         }
 
-        public bool IsProductTitleExistsInProductCategory(string productTitle)
+        public async Task<bool> IsProductTitleExistsInProductCategory(string productTitle)
         {
-            return _context.Products.Any(_ => _.Title == productTitle);
+            return await _context.Products.AnyAsync(_ => _.Title == productTitle);
         }
     }
 }

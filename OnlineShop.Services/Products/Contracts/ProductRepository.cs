@@ -8,7 +8,7 @@ namespace OnlineShop.Services.Products.Contracts
         void Add(Product product);
         Task<Product> FindById(int id);
         Task<bool> IsProductExists(int id);
-        bool IsProductCodeExists(string productCode);
-        bool IsProductTitleExistsInProductCategory(string productTitle);
+        Task<bool> IsProductCodeExists(string productCode);
+        Task<bool> IsProductTitleExistsInProductCategory(string productTitle);
     }
 }

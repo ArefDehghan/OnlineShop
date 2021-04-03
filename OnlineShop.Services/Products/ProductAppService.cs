@@ -26,8 +26,8 @@ namespace OnlineShop.Services.Products
 
         public async Task<int> Add(AddProductDto addProductDto)
         {
-            ThrowExceptionIfProductCodeIsAlreadyExists(addProductDto.ProductCode);
-            ThrowExceptionIfProductTitleIsAlreadyExistsInProductCategory(addProductDto.Title);
+            await ThrowExceptionIfProductCodeIsAlreadyExists(addProductDto.ProductCode);
+            await ThrowExceptionIfProductTitleIsAlreadyExistsInProductCategory(addProductDto.Title);
             await ThrowExceptionIfProductCategoryNotExists(addProductDto.ProductCategoryId);
 
             var product = new Product
@@ -64,9 +64,9 @@ namespace OnlineShop.Services.Products
             }
         }
 
-        private void ThrowExceptionIfProductCodeIsAlreadyExists(string productCode)
+        private async Task ThrowExceptionIfProductCodeIsAlreadyExists(string productCode)
         {
-            if (_repository.IsProductCodeExists(productCode))
+            if (await _repository.IsProductCodeExists(productCode))
             {
                 throw new ProductCodeAlreadyExistsException
                 {
@@ -75,9 +75,9 @@ namespace OnlineShop.Services.Products
             }
         }
 
-        private void ThrowExceptionIfProductTitleIsAlreadyExistsInProductCategory(string productTitle)
+        private async Task ThrowExceptionIfProductTitleIsAlreadyExistsInProductCategory(string productTitle)
         {
-            if (_repository.IsProductTitleExistsInProductCategory(productTitle))
+            if (await _repository.IsProductTitleExistsInProductCategory(productTitle))
             {
                 throw new ProductTitleAlreadyExistsInProductCategory()
                 {
